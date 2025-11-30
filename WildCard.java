@@ -1,5 +1,5 @@
 public class WildCard extends Card implements Actionable {
-    private WildType type;
+    private  WildType type;
     private Color cardColor = color.BLACK;
 
     public WildCard(WildType type) {
@@ -27,8 +27,15 @@ public class WildCard extends Card implements Actionable {
 
     @Override
     public void applyAction() {
-        // Logic to change the current color in the game
         System.out.println("Wild card played! Choose a new color.");
+        if (type == WildType.WILD_DRAW_FOUR) {
+            System.out.println("Wild Draw Four: next player draws 4.");
+            // logic to make the next player draw four cards
+        } else {
+            System.out.println("[Action] Wild: color changed to " + cardColor);
+        }
+        // Logic to change the current color in the game
+        
     }
     
 }
