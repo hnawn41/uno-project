@@ -1,22 +1,10 @@
-public class DrawTwoCard  extends Card implements Actionable {
+public class DrawTwoCard extends ActionCard {
     public DrawTwoCard(Color color) {
         super(color);
     }
 
     @Override
-    public boolean matches(Card other) {
-        if (other == null) return false;
-        if (other instanceof DrawTwoCard) {
-            return true;
-        }
-
-        return this.color == other.getColor();
+    public void apply(Game game) {
+        game.drawCardsForNextPlayer(2);
     }
-
-    @Override
-    public void applyAction() {
-        // Logic to make the next player draw two cards
-        System.out.println("Next player draws two cards!");
-    }
-    
 }

@@ -5,7 +5,7 @@ public abstract class Card {
     protected Color color;
 
 
-    public Card(Color color) {
+    protected Card(Color color) {
         this.color = color;
     }
 
@@ -13,7 +13,7 @@ public abstract class Card {
         return color;
     }
 
-    public abstract boolean matches(Card other);
+    public abstract boolean matches(Card topCard);
     
     
 }

@@ -1,40 +1,46 @@
-import java.util.ArrayList; //beacause shuffling is better in array then linked list
-// i used the predefined method: isempty, remove
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import javax.smartcardio.Card;
+public class Deck {
+    private List<Card> cards = new ArrayList<>();
 
-public class Deck{
-    private List <Card> cards; // they are of type Card (the class)
+    public Deck() {
+        createCards();
+        shuffle();
+    }
 
+    private void createCards() {
+        for (Color c : Color.values()) {
+            if (c == Color.BLACK) continue;
 
-    //constructor
-    public Deck(Card cards){
-      this.cards = new ArrayList<>(108);
+            cards.add(new NumberCard(c, 0));
+            for (int i = 1; i <= 9; i++) {
+                cards.add(new NumberCard(c, i));
+                cards.add(new NumberCard(c, i));
+            }
 
-    };
-
-   // public void createAllcards(){
-    // Color[] colors={ Color.BLACK(0), Color.RED(1), Color.YELLOW(4), Color.GREEN(2), Color.BLUE(3),}
-
-
-    public Card drawcard(){
-        if(isEmpty()){//check if the deck is emty
-            return null;//?
+            cards.add(new SkipCard(c));
+            cards.add(new SkipCard(c));
+            cards.add(new ReverseCard(c));
+            cards.add(new ReverseCard(c));
+            cards.add(new DrawTwoCard(c));
+            cards.add(new DrawTwoCard(c));
         }
-      //remove(int);  //that remove the top of the deck
-      //it is a predefined method from java.util arraylist
-      return cards.remove(0);
+
+        for (int i = 0; i < 4; i++) {
+            cards.add(new WildCard(WildType.WILD));
+            cards.add(new WildCard(WildType.WILD_DRAW_FOUR));
+        }
     }
 
-    //shuffle the deck
-    public void shuffle(){
-      Collections.shuffle(cards);//??
+    public void shuffle() {
+        Collections.shuffle(cards);
     }
 
-    //isEmty to check if the deck is empty
-    public boolean isEmpty(){//this method already exist in arraylist
-        return cards.isEmpty();//return true if there's no element
+    public Card draw() {
+        return cards.isEmpty() ? null : cards.remove(0);
+    }
+
+    public boolean isEmpty() {
+        return cards.isEmpty();
     }
 }

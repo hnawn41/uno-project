@@ -1,7 +1,7 @@
 
 
 /***
- * Number card (0..9)
+ * Number card (0 to 9)
  */
 public class NumberCard extends Card {
 
@@ -9,7 +9,9 @@ public class NumberCard extends Card {
 
     public NumberCard(Color color, int value) {
         super(color);
-        // we gotta add verification
+        if ( value < 0 || value > 9) {
+            throw new IllegalArgumentException("NumberCard value must be between 0 and 9");
+        }
         this.value = value;
     }
 
@@ -17,13 +19,9 @@ public class NumberCard extends Card {
 
     @Override
     public boolean matches(Card other) {
-        if (other == null) return false;
-        if (other instanceof NumberCard) {
-            NumberCard n = (NumberCard) other;
-            return this.color == n.color || this.value == n.value;
-        }
-        // other is action card: match if same color
-        return this.color == other.getColor();
+        if ( other instanceof NumberCard n ) {
+            return color == n.color || value == n.value;
+        } return color == other.getColor();
     }
 
    

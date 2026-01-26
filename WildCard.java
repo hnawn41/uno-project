@@ -1,41 +1,22 @@
 public class WildCard extends Card implements Actionable {
-    private  WildType type;
-    private Color cardColor = color.BLACK;
+    private final WildType type;
 
     public WildCard(WildType type) {
         super(Color.BLACK);
-        this.type = type; 
-    }
-
-    public WildType getType() {
-        return type;
-    }
-    public Color getCardColor() {
-        return cardColor;
-    }
-
-    public void chooseColor(Color color){
-      // logic to choose color
-      // we handle errors
-      this.cardColor = color;
+        this.type = type;
     }
 
     @Override
     public boolean matches(Card other) {
-        return true; // Wild cards match any card
+        return true;
     }
 
     @Override
-    public void applyAction() {
-        System.out.println("Wild card played! Choose a new color.");
-        if (type == WildType.WILD_DRAW_FOUR) {
-            System.out.println("Wild Draw Four: next player draws 4.");
-            // logic to make the next player draw four cards
-        } else {
-            System.out.println("[Action] Wild: color changed to " + cardColor);
-        }
-        // Logic to change the current color in the game
-        
+    public void apply(Game game) {
+        Color chosenColor = game.askColorChoice();
+        game.setCurrentColor(chosenColor);
+
+        if (type == WildType.WILD_DRAW_FOUR)
+            game.drawCardsForNextPlayer(4);
     }
-    
 }
