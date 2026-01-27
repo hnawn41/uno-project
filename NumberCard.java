@@ -18,11 +18,12 @@ public class NumberCard extends Card {
     public int getValue() { return value; }
 
     @Override
-    public boolean matches(Card other) {
-        if ( other instanceof NumberCard n ) {
-            return color == n.color || value == n.value;
-        } return color == other.getColor();
+    public boolean matches(Card other ) {
+    if (other instanceof NumberCard n) {
+        return color == n.color || value == n.value;
     }
+    return color == other.getColor();
+}
 
 
     

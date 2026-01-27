@@ -16,7 +16,7 @@ public class Player {
     }
 
     // Attempt to play a card, returns the card if successful, else null
-    public Card playCard(int cardIndex, Card topCard) {
+    public Card playCard(int cardIndex, Card topCard, Color currentColor) {
         if (cardIndex < 0 || cardIndex >= hand.size()) {
             System.out.println("Invalid card index!");
             return null;
@@ -25,7 +25,7 @@ public class Player {
         Card chosenCard = hand.get(cardIndex);
 
         // Check if the card can be played on top of topCard
-        if (chosenCard.matches(topCard)) {
+        if (chosenCard.matches(topCard )) {
             hand.remove(cardIndex);
             System.out.println(name + " plays → " + chosenCard);
 

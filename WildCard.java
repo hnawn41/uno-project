@@ -7,7 +7,7 @@ public class WildCard extends Card implements Actionable {
     }
 
     @Override
-    public boolean matches(Card other) {
+    public boolean matches(Card other ) {
         return true; // wild cards can always be played
     }
 

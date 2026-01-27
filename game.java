@@ -1,19 +1,18 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class Game {
 
-    /* ========================
-       ATTRIBUTES
-       ======================== */
+    /* attributes */
     private Deck deck;                     // draw pile
     private List<Card> discardPile;        // discard pile
     private List<Player> players;          // list of players
     private int currentPlayerIndex;        // whose turn
-    private int direction;                 // 1 = clockwise, -1 = counter-clockwise
+    private int direction;                 // 1 = clockwise, -1 = reversed
     private Color currentColor;            // active color
-    private Scanner scanner;               // user input
+    private Scanner scanner;               // to scan user input
 
     /* ========================
        CONSTRUCTOR
@@ -35,7 +34,7 @@ public class Game {
     }
 
     public void startGame() {
-        deck.createCards();
+        // shuffle deck
         deck.shuffle();
         
         // Give 7 cards to each player
@@ -88,7 +87,7 @@ public class Game {
 
                 // Attempt to play card
                 Card topCard = getCurrentCard();
-                Card playedCard = currentPlayer.playCard(choice, topCard);
+                Card playedCard = currentPlayer.playCard(choice, topCard, currentColor);
 
                 if (playedCard != null) {
                     placeOnDiscardPile(playedCard);
@@ -162,14 +161,18 @@ public class Game {
     }
 
     public void refillDeckFromDiscard() {
+
+        // checking if enough cards to refill
         if (discardPile.size() <= 1) {
             System.out.println("Not enough cards to refill deck.");
             return;
         }
 
+        // Keep top card, shuffle rest into deck
         Card top = discardPile.remove(discardPile.size() - 1);
+        // we create a new list to avoid modifying discardPile while refilling
         List<Card> toShuffle = new ArrayList<>(discardPile);
-
+        // clear discard pile except top card
         discardPile.clear();
         discardPile.add(top);
 
@@ -182,15 +185,14 @@ public class Game {
        DISCARD PILE
        ======================== */
     public void placeOnDiscardPile(Card card) {
-        discardPile.add(card);
+    discardPile.add(card);
 
-        if (card instanceof WildCard) {
-            Color chosen = askColorChoice();
-            setCurrentColor(chosen);
-        } else {
-            currentColor = card.getColor();
-        }
+    // Update color only for non-wild cards
+    if (!(card instanceof WildCard)) {
+        currentColor = card.getColor();
     }
+}
+
 
     public Card getCurrentCard() {
         return discardPile.get(discardPile.size() - 1);
@@ -200,18 +202,31 @@ public class Game {
        COLOR HANDLING
        ======================== */
     public Color askColorChoice() {
+    while (true) {
         System.out.println("Choose a color:");
         System.out.println("1- RED | 2- GREEN | 3- BLUE | 4- YELLOW");
 
-        int choice = scanner.nextInt();
+        try {
+            int choice = scanner.nextInt();
 
-        return switch (choice) {
-            case 1 -> Color.RED;
-            case 2 -> Color.GREEN;
-            case 3 -> Color.BLUE;
-            default -> Color.YELLOW;
-        };
+            return switch (choice) {
+                case 1 -> Color.RED;
+                case 2 -> Color.GREEN;
+                case 3 -> Color.BLUE;
+                case 4 -> Color.YELLOW;
+                default -> {
+                    System.out.println("Invalid number! Please choose between 1 and 4.");
+                    yield null;
+                }
+            };
+
+        } catch (InputMismatchException e) {
+            System.out.println(" Invalid input! Please enter a number (1–4).");
+            scanner.next(); 
+        }
     }
+}
+
 
     public void setCurrentColor(Color color) {
         this.currentColor = color;
@@ -235,7 +250,7 @@ public class Game {
     public void displayGameState(Player current) {
         System.out.println("\n----------------------------");
         System.out.println("Top card: " + getCurrentCard());
-        System.out.println("Active color: " + currentColor);
+        System.out.println("Active color: " + getCurrentColor());
         System.out.println("Current player: " + current.getName());
         System.out.println("Your hand: " + current.getHand());
         System.out.println("----------------------------");
