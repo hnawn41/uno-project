@@ -51,7 +51,7 @@ public class Game {
         // Set initial color
         if (firstCard instanceof WildCard) {
             currentColor = Color.RED; // default choice
-            System.out.println("First card is Wild → color set to RED");
+            System.out.println("First card is Wild , color set to RED");
         } else {
             currentColor = firstCard.getColor();
         }
@@ -99,12 +99,20 @@ public class Game {
 
                     // UNO announcement
                     if (currentPlayer.handSize() == 1) {
-                        System.out.println(currentPlayer.getName() + " says UNO!");
-                    }
+                    System.out.println("Type 'UNO' to announce your last card! (If you don't, you might get a penalty)");
+                    String announcement = scanner.next();
+        
+                    if (!announcement.equalsIgnoreCase("UNO")) {
+                    System.out.println("Penalty! You didn't say UNO !! Draw 2 cards."); 
+                    for (int i = 0; i < 2; i++) {
+                    currentPlayer.addToHand(drawFromDeck());
+                  }
+        }
+    }
 
                     // Win check
                     if (currentPlayer.hasWon()) {
-                        System.out.println("🎉 WINNER: " + currentPlayer.getName());
+                        System.out.println(" WINNER: " + currentPlayer.getName());
                         gameOver = true;
                     }
 
@@ -120,9 +128,7 @@ public class Game {
         }
     }
 
-    /* ========================
-       TURN MANAGEMENT
-       ======================== */
+    /* turn management */
     public void nextTurn() {
         int n = players.size();
         currentPlayerIndex = (currentPlayerIndex + direction + n) % n;
@@ -150,9 +156,7 @@ public class Game {
         nextTurn();
     }
 
-    /* ========================
-       DECK MANAGEMENT
-       ======================== */
+    /* deck management */
     private Card drawFromDeck() {
         if (deck.isEmpty()) {
             refillDeckFromDiscard();
@@ -181,9 +185,7 @@ public class Game {
         System.out.println("Deck refilled from discard pile.");
     }
 
-    /* ========================
-       DISCARD PILE
-       ======================== */
+    /* discard pile */
     public void placeOnDiscardPile(Card card) {
     discardPile.add(card);
 
@@ -198,9 +200,7 @@ public class Game {
         return discardPile.get(discardPile.size() - 1);
     }
 
-    /* ========================
-       COLOR HANDLING
-       ======================== */
+    /* color handling */
     public Color askColorChoice() {
     while (true) {
         System.out.println("Choose a color:");
@@ -233,9 +233,7 @@ public class Game {
         System.out.println("Color changed to " + color);
     }
 
-    /* ========================
-       GETTERS
-       ======================== */
+    /* getters */
     public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
     }
@@ -244,9 +242,7 @@ public class Game {
         return currentColor;
     }
 
-    /* ========================
-       DISPLAY
-       ======================== */
+    /* display */
     public void displayGameState(Player current) {
         System.out.println("\n----------------------------");
         System.out.println("Top card: " + getCurrentCard());

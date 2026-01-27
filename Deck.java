@@ -3,7 +3,7 @@ import java.util.*;
 public class Deck {
     private List<Card> cards = new ArrayList<>();
 
-    // Constructor: create cards but don't shuffle yet
+    // we just create cards
     public Deck() {
         createCards();
     }

@@ -25,7 +25,7 @@ public class Player {
         Card chosenCard = hand.get(cardIndex);
 
         // Check if the card can be played on top of topCard
-        if (chosenCard.matches(topCard )) {
+        if (chosenCard.matches(topCard, currentColor )) {
             hand.remove(cardIndex);
             System.out.println(name + " plays → " + chosenCard);
 

@@ -13,7 +13,7 @@ public abstract class Card {
         return color;
     }
 
-    public abstract boolean matches(Card topCard);
+    public abstract boolean matches(Card topCard, Color currentColor);
     
     
 }

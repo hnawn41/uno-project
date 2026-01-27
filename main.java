@@ -32,7 +32,7 @@ public class Main {
         // Main game loop
         game.play();
 
-        System.out.println("\n=== GAME OVER ===");
+        System.out.println("\n-------------- GAME OVER --------------");
 
 
         scanner.close();
