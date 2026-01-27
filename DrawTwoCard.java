@@ -7,4 +7,9 @@ public class DrawTwoCard extends ActionCard {
     public void apply(Game game) {
         game.drawCardsForNextPlayer(2);
     }
+
+    @Override
+    public String toString() {
+        return "DrawTwoCard(" + color + ")";
+    }
 }

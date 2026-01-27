@@ -8,4 +8,5 @@ public abstract class ActionCard extends Card implements Actionable {
         return other instanceof ActionCard || this.color == other.getColor();
     }
     
+
 }

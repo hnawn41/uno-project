@@ -1,80 +1,73 @@
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Player {
-  
-    private  String name ;                                // attributes :
-    private  List<Card> hand;
 
+    private String name;
+    private List<Card> hand;
 
-   public Player(String name ) {
-        this.name  = name ;                              // constractor 
-        this.hand = new ArrayList<>();             
+    public Player(String name) {
+        this.name = name;
+        this.hand = new ArrayList<>();
     }
 
-
-
-
-public int handSize() {
-        return hand.size();  //displays the size of the hand
+    public int handSize() {
+        return hand.size();
     }
 
-public void playcard(int cardIndex , Game game){
-     
-   if (cardIndex < 0 || cardIndex >= hand.size()) {
+    // Attempt to play a card, returns the card if successful, else null
+    public Card playCard(int cardIndex, Card topCard) {
+        if (cardIndex < 0 || cardIndex >= hand.size()) {
             System.out.println("Invalid card index!");
-            return;
+            return null;
         }
+
         Card chosenCard = hand.get(cardIndex);
-         //the checking of the condittion
-         if (chosenCard.matches(game.getCurrentCard())) {
-           hand.remove(cardIndex);
-         // 6. Show what happened
-             System.out.println("Player " + name + " plays → " + chosenCard);
-             if (hand.size() == 1) {
-                System.out.println("Player " + name  + " : UNOOO!"); // if the player has one card left he says UNO
-             } else if (hand.isEmpty()) {
-                System.out.println("Player " + name + " has won the game!"); // if the player has no cards left he wins
-             }
 
-         } else {
+        // Check if the card can be played on top of topCard
+        if (chosenCard.matches(topCard)) {
+            hand.remove(cardIndex);
+            System.out.println(name + " plays → " + chosenCard);
+
+            if (hand.size() == 1) {
+                System.out.println(name + " says UNO!");
+            } else if (hand.isEmpty()) {
+                System.out.println(name + " has won the game!");
+            }
+
+            return chosenCard; // return the played card
+        } else {
             System.out.println("You cannot play this card!");
-         }
+            return null;
+        }
+    }
 
-       
-
-}
-
-public void addToHand(Card card) {
-        hand.add(card);
+    public void addToHand(Card card) {
+        if (card != null) hand.add(card);
     }
 
     public List<Card> getHand() {
         return hand;
     }
 
-
-public void  sayUNO() {
+    public void sayUNO() {
         if (hand.size() == 1) {
-            System.out.println("Player " + name  + " : UNOOO!"); // if the player has one card left he says UNO
-        }else {
+            System.out.println(name + " says UNO!");
+        } else {
             System.out.println("You cannot say UNO now! You have " + hand.size() + " cards.");
         }
     }
 
-
-   public String getname () {
-        return name ;     //geter for the name  
+    public String getName() {
+        return name;
     }
 
     @Override
     public String toString() {
-        return "Player " + name  + " (" + hand.size() + " cards)";
+        return name + " (" + hand.size() + " cards)";
     }
 
     public boolean hasWon() {
-        return hand.isEmpty();  //checks if the player has won
+        return hand.isEmpty();
     }
- 
 }

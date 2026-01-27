@@ -4,37 +4,40 @@ import java.util.Scanner;
 
 public class Game {
 
-    /*attributes  */
-
+    /* ========================
+       ATTRIBUTES
+       ======================== */
     private Deck deck;                     // draw pile
-    private List<Card> discardPile;         // discard pile
-    private List<Player> players;           // players
+    private List<Card> discardPile;        // discard pile
+    private List<Player> players;          // list of players
+    private int currentPlayerIndex;        // whose turn
+    private int direction;                 // 1 = clockwise, -1 = counter-clockwise
+    private Color currentColor;            // active color
+    private Scanner scanner;               // user input
 
-    private int currentPlayerIndex;         // whose turn
-    private int direction;                  // 1 = clockwise, -1 = counter-clockwise
-    private Color currentColor;             // active color
-
-    private Scanner scanner;
-
-    /* constructor*/
-
+    /* ========================
+       CONSTRUCTOR
+       ======================== */
     public Game() {
         this.deck = new Deck();
         this.discardPile = new ArrayList<>();
         this.players = new ArrayList<>();
         this.currentPlayerIndex = 0;
-        this.direction = 1;
+        this.direction = 1; // start clockwise
         this.scanner = new Scanner(System.in);
     }
 
-    /* methods*/
-
+    /* ========================
+       SETUP
+       ======================== */
     public void addPlayer(Player player) {
         players.add(player);
     }
 
     public void startGame() {
-
+        deck.createCards();
+        deck.shuffle();
+        
         // Give 7 cards to each player
         for (Player p : players) {
             for (int i = 0; i < 7; i++) {
@@ -48,7 +51,7 @@ public class Game {
 
         // Set initial color
         if (firstCard instanceof WildCard) {
-            currentColor = Color.RED; // simple rule
+            currentColor = Color.RED; // default choice
             System.out.println("First card is Wild → color set to RED");
         } else {
             currentColor = firstCard.getColor();
@@ -59,24 +62,19 @@ public class Game {
         System.out.println("Active color: " + currentColor);
     }
 
-    /* =======================
+    /* ========================
        MAIN GAME LOOP
-       ======================= */
-
+       ======================== */
     public void play() {
-
         boolean gameOver = false;
 
         while (!gameOver) {
-
             Player currentPlayer = getCurrentPlayer();
-
             displayGameState(currentPlayer);
 
             boolean played = false;
 
             while (!played) {
-
                 System.out.println("Choose card index to play (-1 to draw): ");
                 int choice = scanner.nextInt();
 
@@ -85,32 +83,35 @@ public class Game {
                     Card drawn = drawFromDeck();
                     currentPlayer.addToHand(drawn);
                     System.out.println(currentPlayer.getName() + " draws a card.");
-                    break;
+                    break; // end turn after drawing
                 }
 
+                // Attempt to play card
                 Card topCard = getCurrentCard();
                 Card playedCard = currentPlayer.playCard(choice, topCard);
 
                 if (playedCard != null) {
                     placeOnDiscardPile(playedCard);
 
-                    // Apply action if needed
+                    // Apply action if applicable
                     if (playedCard instanceof Actionable) {
                         ((Actionable) playedCard).apply(this);
                     }
 
-                    // UNO rule
+                    // UNO announcement
                     if (currentPlayer.handSize() == 1) {
                         System.out.println(currentPlayer.getName() + " says UNO!");
                     }
 
-                    // Win condition
+                    // Win check
                     if (currentPlayer.hasWon()) {
                         System.out.println("🎉 WINNER: " + currentPlayer.getName());
                         gameOver = true;
                     }
 
                     played = true;
+                } else {
+                    System.out.println("Cannot play this card! Choose again.");
                 }
             }
 
@@ -120,10 +121,9 @@ public class Game {
         }
     }
 
-    /* =======================
-       GAME MECHANICS
-       ======================= */
-
+    /* ========================
+       TURN MANAGEMENT
+       ======================== */
     public void nextTurn() {
         int n = players.size();
         currentPlayerIndex = (currentPlayerIndex + direction + n) % n;
@@ -151,10 +151,9 @@ public class Game {
         nextTurn();
     }
 
-    /* =======================
+    /* ========================
        DECK MANAGEMENT
-       ======================= */
-
+       ======================== */
     private Card drawFromDeck() {
         if (deck.isEmpty()) {
             refillDeckFromDiscard();
@@ -162,7 +161,7 @@ public class Game {
         return deck.draw();
     }
 
-    private void refillDeckFromDiscard() {
+    public void refillDeckFromDiscard() {
         if (discardPile.size() <= 1) {
             System.out.println("Not enough cards to refill deck.");
             return;
@@ -179,10 +178,9 @@ public class Game {
         System.out.println("Deck refilled from discard pile.");
     }
 
-    /* =======================
+    /* ========================
        DISCARD PILE
-       ======================= */
-
+       ======================== */
     public void placeOnDiscardPile(Card card) {
         discardPile.add(card);
 
@@ -198,10 +196,9 @@ public class Game {
         return discardPile.get(discardPile.size() - 1);
     }
 
-    /* =======================
+    /* ========================
        COLOR HANDLING
-       ======================= */
-
+       ======================== */
     public Color askColorChoice() {
         System.out.println("Choose a color:");
         System.out.println("1- RED | 2- GREEN | 3- BLUE | 4- YELLOW");
@@ -221,10 +218,9 @@ public class Game {
         System.out.println("Color changed to " + color);
     }
 
-    /* =======================
+    /* ========================
        GETTERS
-       ======================= */
-
+       ======================== */
     public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
     }
@@ -233,16 +229,15 @@ public class Game {
         return currentColor;
     }
 
-    /* =======================
+    /* ========================
        DISPLAY
-       ======================= */
-
-    private void displayGameState(Player current) {
+       ======================== */
+    public void displayGameState(Player current) {
         System.out.println("\n----------------------------");
         System.out.println("Top card: " + getCurrentCard());
         System.out.println("Active color: " + currentColor);
         System.out.println("Current player: " + current.getName());
-        System.out.println("Your hand: " + current);
+        System.out.println("Your hand: " + current.getHand());
         System.out.println("----------------------------");
     }
 }

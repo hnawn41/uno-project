@@ -7,4 +7,9 @@ public class ReverseCard extends ActionCard {
     public void apply(Game game) {
         game.reverseDirection();
     }
+
+    @Override
+    public String toString() {
+        return "ReverseCard(" + color + ")";
+    }
 }

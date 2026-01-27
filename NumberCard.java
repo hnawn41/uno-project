@@ -24,5 +24,12 @@ public class NumberCard extends Card {
         } return color == other.getColor();
     }
 
+
+    
+    @Override
+    public String toString() {
+        return "NumberCard(" + value + ", " + color + ")";
+    }
+
    
 }
