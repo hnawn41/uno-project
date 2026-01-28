@@ -9,7 +9,7 @@ public class Main {
         System.out.println("---------- WELCOME TO UNO GAME ------------\n\n");
 
         // Create game
-        Game game = new Game();
+        Game game = new Game(scanner);
 
         // Ask number of players (2-4)
         int numPlayers = 0;

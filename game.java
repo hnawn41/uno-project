@@ -14,21 +14,17 @@ public class Game {
     private Color currentColor;            // active color
     private Scanner scanner;               // to scan user input
 
-    /* ========================
-       CONSTRUCTOR
-       ======================== */
-    public Game() {
+    /* constructor */
+    public Game(Scanner scanner) {
         this.deck = new Deck();
         this.discardPile = new ArrayList<>();
         this.players = new ArrayList<>();
         this.currentPlayerIndex = 0;
         this.direction = 1; // start clockwise
-        this.scanner = new Scanner(System.in);
+        this.scanner = scanner;
     }
 
-    /* ========================
-       SETUP
-       ======================== */
+    /* setup */
     public void addPlayer(Player player) {
         players.add(player);
     }
@@ -61,9 +57,7 @@ public class Game {
         System.out.println("Active color: " + currentColor);
     }
 
-    /* ========================
-       MAIN GAME LOOP
-       ======================== */
+    /* game loop */
     public void play() {
         boolean gameOver = false;
 
